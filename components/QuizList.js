@@ -16,6 +16,7 @@ export default function QuizList() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [expanded, setExpanded] = useState({});
+    const [expandedHints, setExpandedHints] = useState({});
 
     useEffect(() => {
         async function loadQuizzes() {
@@ -24,7 +25,7 @@ export default function QuizList() {
             try {
                 const { data, error: sbError } = await supabase
                     .from("question")
-                    .select("id, question_text, answer, category")
+                    .select("id, question_text, answer, hint, category")
                     .order("id", { ascending: true });
 
                 if (sbError) {
@@ -52,6 +53,10 @@ export default function QuizList() {
     const toggleQuiz = (quizId) => {
         setExpanded((prev) => ({ ...prev, [quizId]: !prev[quizId] }));
     };
+
+    const toggleHint = (quizId) => {
+        setExpandedHints((prev) => ({ ...prev, [quizId]: !prev[quizId] }));
+    }; 
 
     return (
         <div>
@@ -134,6 +139,39 @@ export default function QuizList() {
                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 whitespace-pre-wrap">
                                     {quiz.question_text}
                                 </h3>
+
+                                <button
+                                    onClick={() => toggleHint(quiz.id)}
+                                    className="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 mb-2"
+                                >
+                                    ヒントを見る
+                                </button>
+
+                                {expandedHints[quiz.id] && (
+                                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mt-2">
+                                        <div className="flex items-center mb-2">
+                                            <svg
+                                                className="h-4 w-4 text-yellow-600 dark:text-yellow-400 mr-2"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                                                />
+                                            </svg>
+                                            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                                ヒント
+                                            </span>
+                                        </div>
+                                        <p className="text-gray-900 dark:text-white font-medium">
+                                            {quiz.hint || "ヒントは登録されていません。"}
+                                        </p>
+                                    </div>
+                                )}
 
                                 <button
                                     onClick={() => toggleQuiz(quiz.id)}

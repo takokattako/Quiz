@@ -20,6 +20,7 @@ export default function QuizForm() {
         question: "",
         correct_answer: "",
         category: "英語",
+        hint: "",
     });
 
     const handleChange = (e) => {
@@ -42,6 +43,7 @@ export default function QuizForm() {
                 question_text: formData.question,
                 answer: formData.correct_answer,
                 category: formData.category,
+                hint: formData.hint,
             };
 
             const { data, error: sbError } = await supabase
@@ -53,7 +55,7 @@ export default function QuizForm() {
                 setError(sbError.message);
             } else {
                 setSuccess("クイズを保存しました。");
-                setFormData({ question: "", correct_answer: "", category: "英語" });
+                setFormData({ question: "", correct_answer: "", category: "英語", hint: "" });
             }
         } catch (err) {
             setError(String(err));
@@ -140,6 +142,25 @@ export default function QuizForm() {
                         className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white text-black"
                         placeholder="問題文を入力してください"
                     />
+
+                    {/* ヒント */}
+                    <div className="mt-4">
+                        <label
+                            htmlFor="hint"
+                            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                        >
+                            ヒント <span className="text-gray-500 text-sm">(任意)</span>
+                        </label>
+                        <textarea
+                            id="hint"
+                            name="hint"
+                            rows={2}
+                            value={formData.hint}
+                            onChange={handleChange}
+                            className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white text-black"
+                            placeholder="ヒント（任意）を入力してください"
+                        />
+                    </div>
                 </div>
 
                 {/* 正解 */}
