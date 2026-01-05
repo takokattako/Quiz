@@ -137,7 +137,7 @@ export default function QuizForm() {
                         value={formData.question}
                         onChange={handleChange}
                         required
-                        className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-black"
+                        className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white text-black"
                         placeholder="問題文を入力してください"
                     />
                 </div>
@@ -157,7 +157,7 @@ export default function QuizForm() {
                         value={formData.correct_answer}
                         onChange={handleChange}
                         required
-                        className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-black"
+                        className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white text-black"
                         placeholder="正解を入力してください"
                     />
                 </div>
@@ -176,13 +176,15 @@ export default function QuizForm() {
                             name="category"
                             value={formData.category}
                             onChange={handleChange}
-                            className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-black"
+                            className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white text-black"
                         >
                             <option value="英語">英語</option>
                             <option value="数学">数学</option>
                             <option value="国語">国語</option>
                             <option value="理科">理科</option>
-                            <option value="社会">社会</option>
+                            <option value="地理">地理</option>
+                            <option value="歴史">歴史</option>
+                            <option value="公民">公民</option>
                         </select>
                     </div>
                 </div>
@@ -192,14 +194,14 @@ export default function QuizForm() {
                     <button
                         type="button"
                         onClick={() => router.push("/")}
-                        className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                     >
                         キャンセル
                     </button>
                     <button
                         type="submit"
                         disabled={loading}
-                        className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {loading ? (
                             <div className="flex items-center">

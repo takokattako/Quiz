@@ -3,7 +3,7 @@ import QuizForm from "@/components/QuizForm";
 
 export default function CreatePage() {
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="min-h-screen bg-red-100 dark:bg-red-900">
             {/* ヘッダー */}
             <header className="bg-white dark:bg-gray-800 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -11,7 +11,7 @@ export default function CreatePage() {
                         <div className="flex items-center">
                             <Link
                                 href="/"
-                                className="text-2xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
+                                className="text-2xl font-bold text-gray-900 dark:text-white hover:text-red-600 dark:hover:text-red-400"
                             >
                                 クイズアプリ
                             </Link>
@@ -19,13 +19,13 @@ export default function CreatePage() {
                         <nav className="hidden md:flex space-x-8">
                             <Link
                                 href="/"
-                                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
+                                className="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 font-medium"
                             >
                                 ホーム
                             </Link>
                             <Link
                                 href="/create"
-                                className="text-blue-600 dark:text-blue-400 font-medium"
+                                className="text-red-600 dark:text-red-400 font-medium"
                             >
                                 クイズを追加
                             </Link>

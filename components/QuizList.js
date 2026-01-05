@@ -65,7 +65,7 @@ export default function QuizList() {
                         <select
                             value={selectedCategory}
                             onChange={(e) => setSelectedCategory(e.target.value)}
-                            className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 text-gray-900 dark:text-white"
                         >
                             <option value="">すべて</option>
                             <option value="英語">英語</option>
@@ -111,7 +111,7 @@ export default function QuizList() {
                     <div className="mt-6">
                         <Link
                             href="/create"
-                            className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                         >
                             クイズを追加
                         </Link>
