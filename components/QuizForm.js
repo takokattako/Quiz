@@ -21,6 +21,12 @@ export default function QuizForm() {
         correct_answer: "",
         category: "英語",
         hint: "",
+        choice1: "",
+        choice2: "",
+        choice3: "",
+        choice4: "",
+        explanation: "",
+        correct_choice_index: 0,
     });
 
     const handleChange = (e) => {
@@ -44,6 +50,11 @@ export default function QuizForm() {
                 answer: formData.correct_answer,
                 category: formData.category,
                 hint: formData.hint,
+                choice1: formData.choice1,
+                choice2: formData.choice2,
+                choice3: formData.choice3,
+                choice4: formData.choice4,
+                explanation: formData.explanation,
             };
 
             const { data, error: sbError } = await supabase
@@ -55,7 +66,18 @@ export default function QuizForm() {
                 setError(sbError.message);
             } else {
                 setSuccess("クイズを保存しました。");
-                setFormData({ question: "", correct_answer: "", category: "英語", hint: "" });
+                setFormData({
+                    question: "",
+                    correct_answer: "",
+                    category: "英語",
+                    hint: "",
+                    choice1: "",
+                    choice2: "",
+                    choice3: "",
+                    choice4: "",
+                    explanation: "",
+                    correct_choice_index: 0,
+                });
             }
         } catch (err) {
             setError(String(err));

@@ -17,6 +17,7 @@ export default function QuizList() {
     const [error, setError] = useState(null);
     const [expanded, setExpanded] = useState({});
     const [expandedHints, setExpandedHints] = useState({});
+    const [selectedOptions, setSelectedOptions] = useState({}); // quizId -> index of clicked option
 
     useEffect(() => {
         async function loadQuizzes() {
@@ -25,7 +26,7 @@ export default function QuizList() {
             try {
                 const { data, error: sbError } = await supabase
                     .from("question")
-                    .select("id, question_text, answer, hint, category")
+                    .select("id, question_text, answer, hint, category, choice1, choice2, choice3, choice4, explanation")
                     .order("id", { ascending: true });
 
                 if (sbError) {
@@ -56,7 +57,15 @@ export default function QuizList() {
 
     const toggleHint = (quizId) => {
         setExpandedHints((prev) => ({ ...prev, [quizId]: !prev[quizId] }));
-    }; 
+    };
+
+    const handleOptionClick = (quizId, index, optionText) => {
+        // ignore if already answered
+        setSelectedOptions((prev) => {
+            if (prev[quizId] !== undefined) return prev;
+            return { ...prev, [quizId]: { index, optionText } };
+        });
+    };
 
     return (
         <div>
@@ -140,71 +149,65 @@ export default function QuizList() {
                                     {quiz.question_text}
                                 </h3>
 
-                                <button
-                                    onClick={() => toggleHint(quiz.id)}
-                                    className="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 mb-2"
-                                >
-                                    ヒントを見る
-                                </button>
+                                {/* 選択肢（縦一列で表示） */}
+                                <div className="mt-4">
+                                    {(() => {
+                                        const choices = [];
+                                        if (quiz.choice1 !== undefined) choices.push(quiz.choice1);
+                                        if (quiz.choice2 !== undefined) choices.push(quiz.choice2);
+                                        if (quiz.choice3 !== undefined) choices.push(quiz.choice3);
+                                        if (quiz.choice4 !== undefined) choices.push(quiz.choice4);
+                                        // fallback: if no separate choices, try to parse JSON from hint
+                                        if (choices.length === 0) {
+                                            try {
+                                                const parsed = quiz.hint ? JSON.parse(quiz.hint) : null;
+                                                if (Array.isArray(parsed) && parsed.length >= 1) choices.push(...parsed.slice(0, 4));
+                                            } catch (e) {}
+                                        }
+                                        if (choices.length === 0) choices.push(quiz.answer || "");
 
-                                {expandedHints[quiz.id] && (
-                                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mt-2">
-                                        <div className="flex items-center mb-2">
-                                            <svg
-                                                className="h-4 w-4 text-yellow-600 dark:text-yellow-400 mr-2"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth={2}
-                                                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                                                />
-                                            </svg>
-                                            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                                ヒント
-                                            </span>
+                                        return choices.map((choice, idx) => {
+                                            const selected = selectedOptions[quiz.id];
+                                            const isClicked = selected && selected.index === idx;
+                                            const isCorrect = quiz.answer !== undefined && String(choice) === String(quiz.answer);
+                                            const baseClass = "w-full text-left border rounded-lg p-3 mb-2";
+                                            const defaultStyle = "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700";
+                                            let style = defaultStyle;
+
+                                            if (selected) {
+                                                if (isClicked) {
+                                                    style = isCorrect
+                                                        ? "border-green-500 bg-green-100 text-green-900 dark:bg-green-900/20"
+                                                        : "border-red-500 bg-red-100 text-red-900 dark:bg-red-900/20";
+                                                }
+                                            }
+
+                                            return (
+                                                <button
+                                                    key={idx}
+                                                    onClick={() => handleOptionClick(quiz.id, idx, choice)}
+                                                    disabled={selectedOptions[quiz.id] !== undefined}
+                                                    className={`${baseClass} ${style} focus:outline-none`}
+                                                >
+                                                    <div className="flex items-center">
+                                                        <div className="mr-3 text-sm font-medium">{String.fromCharCode(65 + idx)}.</div>
+                                                        <div className="text-sm font-medium break-words">{choice}</div>
+                                                    </div>
+                                                </button>
+                                            );
+                                        });
+                                    })()}
+
+                                    {/* 解説 */}
+                                    {selectedOptions[quiz.id] && (
+                                        <div className="bg-gray-50 dark:bg-gray-700 rounded-md p-4 mt-2">
+                                            <div className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">解説</div>
+                                            <div className="text-gray-900 dark:text-white text-sm">
+                                                {quiz.explanation || quiz.hint || "解説は登録されていません。"}
+                                            </div>
                                         </div>
-                                        <p className="text-gray-900 dark:text-white font-medium">
-                                            {quiz.hint || "ヒントは登録されていません。"}
-                                        </p>
-                                    </div>
-                                )}
-
-                                <button
-                                    onClick={() => toggleQuiz(quiz.id)}
-                                    className="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200"
-                                >
-                                    回答を見る
-                                </button>
-
-                                {expanded[quiz.id] && (
-                                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mt-4">
-                                        <div className="flex items-center mb-2">
-                                            <svg
-                                                className="h-4 w-4 text-gray-600 dark:text-gray-400 mr-2"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth={2}
-                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                />
-                                            </svg>
-                                            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                                正解
-                                            </span>
-                                        </div>
-                                        <p className="text-gray-900 dark:text-white font-medium">
-                                            {quiz.answer}
-                                        </p>
-                                    </div>
-                                )}
+                                    )}
+                                </div>
                             </div>
                         </div>
                     ))}
