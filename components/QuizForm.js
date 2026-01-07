@@ -18,14 +18,12 @@ export default function QuizForm() {
 
     const [formData, setFormData] = useState({
         question: "",
-        correct_answer: "",
+        explanation: "",
         category: "英語",
-        hint: "",
         choice1: "",
         choice2: "",
         choice3: "",
         choice4: "",
-        explanation: "",
         correct_choice_index: 0,
     });
 
@@ -47,14 +45,12 @@ export default function QuizForm() {
             // DB カラム名に合わせてマッピングして挿入
             const payload = {
                 question_text: formData.question,
-                answer: formData.correct_answer,
+                answer: formData.explanation,
                 category: formData.category,
-                hint: formData.hint,
                 choice1: formData.choice1,
                 choice2: formData.choice2,
                 choice3: formData.choice3,
                 choice4: formData.choice4,
-                explanation: formData.explanation,
             };
 
             const { data, error: sbError } = await supabase
@@ -68,14 +64,12 @@ export default function QuizForm() {
                 setSuccess("クイズを保存しました。");
                 setFormData({
                     question: "",
-                    correct_answer: "",
+                    explanation: "",
                     category: "英語",
-                    hint: "",
                     choice1: "",
                     choice2: "",
                     choice3: "",
                     choice4: "",
-                    explanation: "",
                     correct_choice_index: 0,
                 });
             }
@@ -165,43 +159,104 @@ export default function QuizForm() {
                         placeholder="問題文を入力してください"
                     />
 
-                    {/* ヒント */}
+                    {/* 選択肢1 */}
                     <div className="mt-4">
                         <label
-                            htmlFor="hint"
+                            htmlFor="choice1"
                             className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                         >
-                            ヒント <span className="text-gray-500 text-sm">(任意)</span>
+                            選択肢1 <span className="text-red-500">*</span>
                         </label>
-                        <textarea
-                            id="hint"
-                            name="hint"
-                            rows={2}
-                            value={formData.hint}
+                        <input
+                            type="text"
+                            id="choice1"
+                            name="choice1"
+                            value={formData.choice1}
                             onChange={handleChange}
+                            required
                             className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white text-black"
-                            placeholder="ヒント（任意）を入力してください"
+                            placeholder="選択肢1を入力してください"
+                        />
+                    </div>
+
+                    {/* 選択肢2 */}
+                    <div className="mt-4">
+                        <label
+                            htmlFor="choice2"
+                            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                        >
+                            選択肢2 <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="choice2"
+                            name="choice2"
+                            value={formData.choice2}
+                            onChange={handleChange}
+                            required
+                            className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white text-black"
+                            placeholder="選択肢2を入力してください"
+                        />
+                    </div>
+
+                    {/* 選択肢3 */}
+                    <div className="mt-4">
+                        <label
+                            htmlFor="choice3"
+                            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                        >
+                            選択肢3 <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="choice3"
+                            name="choice3"
+                            value={formData.choice3}
+                            onChange={handleChange}
+                            required
+                            className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white text-black"
+                            placeholder="選択肢3を入力してください"
+                        />
+                    </div>
+
+                    {/* 選択肢4 */}
+                    <div className="mt-4">
+                        <label
+                            htmlFor="choice4"
+                            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                        >
+                            選択肢4 <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="choice4"
+                            name="choice4"
+                            value={formData.choice4}
+                            onChange={handleChange}
+                            required
+                            className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white text-black"
+                            placeholder="選択肢4を入力してください"
                         />
                     </div>
                 </div>
 
-                {/* 正解 */}
+                {/* 解説 */}
                 <div>
                     <label
-                        htmlFor="correct_answer"
+                        htmlFor="explanation"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                     >
-                        正解 <span className="text-red-500">*</span>
+                        解説 <span className="text-red-500">*</span>
                     </label>
                     <input
                         type="text"
-                        id="correct_answer"
-                        name="correct_answer"
-                        value={formData.correct_answer}
+                        id="explanation"
+                        name="explanation"
+                        value={formData.explanation}
                         onChange={handleChange}
                         required
                         className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white text-black"
-                        placeholder="正解を入力してください"
+                        placeholder="解説を入力してください"
                     />
                 </div>
 

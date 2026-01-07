@@ -16,7 +16,6 @@ export default function QuizList() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [expanded, setExpanded] = useState({});
-    const [expandedHints, setExpandedHints] = useState({});
     const [selectedOptions, setSelectedOptions] = useState({}); // quizId -> index of clicked option
 
     useEffect(() => {
@@ -26,7 +25,7 @@ export default function QuizList() {
             try {
                 const { data, error: sbError } = await supabase
                     .from("question")
-                    .select("id, question_text, answer, hint, category, choice1, choice2, choice3, choice4, explanation")
+                    .select("id, question_text, answer, category, choice1, choice2, choice3, choice4, explanation")
                     .order("id", { ascending: true });
 
                 if (sbError) {
@@ -53,10 +52,6 @@ export default function QuizList() {
 
     const toggleQuiz = (quizId) => {
         setExpanded((prev) => ({ ...prev, [quizId]: !prev[quizId] }));
-    };
-
-    const toggleHint = (quizId) => {
-        setExpandedHints((prev) => ({ ...prev, [quizId]: !prev[quizId] }));
     };
 
     const handleOptionClick = (quizId, index, optionText) => {
@@ -157,13 +152,6 @@ export default function QuizList() {
                                         if (quiz.choice2 !== undefined) choices.push(quiz.choice2);
                                         if (quiz.choice3 !== undefined) choices.push(quiz.choice3);
                                         if (quiz.choice4 !== undefined) choices.push(quiz.choice4);
-                                        // fallback: if no separate choices, try to parse JSON from hint
-                                        if (choices.length === 0) {
-                                            try {
-                                                const parsed = quiz.hint ? JSON.parse(quiz.hint) : null;
-                                                if (Array.isArray(parsed) && parsed.length >= 1) choices.push(...parsed.slice(0, 4));
-                                            } catch (e) {}
-                                        }
                                         if (choices.length === 0) choices.push(quiz.answer || "");
 
                                         return choices.map((choice, idx) => {
@@ -203,7 +191,7 @@ export default function QuizList() {
                                         <div className="bg-gray-50 dark:bg-gray-700 rounded-md p-4 mt-2">
                                             <div className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">解説</div>
                                             <div className="text-gray-900 dark:text-white text-sm">
-                                                {quiz.explanation || quiz.hint || "解説は登録されていません。"}
+                                                {quiz.explanation || "解説は登録されていません。"}
                                             </div>
                                         </div>
                                     )}
