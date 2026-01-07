@@ -25,7 +25,7 @@ export default function QuizList() {
             try {
                 const { data, error: sbError } = await supabase
                     .from("question")
-                    .select("id, question_text, answer, category, choice1, choice2, choice3, choice4, explanation")
+                    .select("id, question_text, correct, category, choice1, choice2, choice3, choice4, explanation")
                     .order("id", { ascending: true });
 
                 if (sbError) {
@@ -152,12 +152,11 @@ export default function QuizList() {
                                         if (quiz.choice2 !== undefined) choices.push(quiz.choice2);
                                         if (quiz.choice3 !== undefined) choices.push(quiz.choice3);
                                         if (quiz.choice4 !== undefined) choices.push(quiz.choice4);
-                                        if (choices.length === 0) choices.push(quiz.answer || "");
 
                                         return choices.map((choice, idx) => {
                                             const selected = selectedOptions[quiz.id];
                                             const isClicked = selected && selected.index === idx;
-                                            const isCorrect = quiz.answer !== undefined && String(choice) === String(quiz.answer);
+                                            const isCorrect = quiz.correct === `choice${idx + 1}`;
                                             const baseClass = "w-full text-left border rounded-lg p-3 mb-2";
                                             const defaultStyle = "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700";
                                             let style = defaultStyle;

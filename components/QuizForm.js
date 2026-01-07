@@ -24,7 +24,7 @@ export default function QuizForm() {
         choice2: "",
         choice3: "",
         choice4: "",
-        correct_choice_index: 0,
+        correct_choice: "choice1",
     });
 
     const handleChange = (e) => {
@@ -45,12 +45,13 @@ export default function QuizForm() {
             // DB カラム名に合わせてマッピングして挿入
             const payload = {
                 question_text: formData.question,
-                answer: formData.explanation,
+                correct: formData.correct_choice,
                 category: formData.category,
                 choice1: formData.choice1,
                 choice2: formData.choice2,
                 choice3: formData.choice3,
                 choice4: formData.choice4,
+                explanation: formData.explanation,
             };
 
             const { data, error: sbError } = await supabase
@@ -70,7 +71,7 @@ export default function QuizForm() {
                     choice2: "",
                     choice3: "",
                     choice4: "",
-                    correct_choice_index: 0,
+                    correct_choice: "choice1",
                 });
             }
         } catch (err) {
@@ -238,6 +239,29 @@ export default function QuizForm() {
                             placeholder="選択肢4を入力してください"
                         />
                     </div>
+                </div>
+
+                {/* 正解 */}
+                <div>
+                    <label
+                        htmlFor="correct_choice_index"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                        正解 <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                        id="correct_choice"
+                        name="correct_choice"
+                        value={formData.correct_choice}
+                        onChange={handleChange}
+                        required
+                        className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white text-black"
+                    >
+                        <option value="choice1">選択肢1: {formData.choice1 || "未入力"}</option>
+                        <option value="choice2">選択肢2: {formData.choice2 || "未入力"}</option>
+                        <option value="choice3">選択肢3: {formData.choice3 || "未入力"}</option>
+                        <option value="choice4">選択肢4: {formData.choice4 || "未入力"}</option>
+                    </select>
                 </div>
 
                 {/* 解説 */}
